@@ -666,10 +666,10 @@
 						search_flags |= SEARCH_OCCUPANT
 				if("console")
 					search_flags |= SEARCH_STORED
-					break
+					return
 				if("disk")
 					search_flags |= SEARCH_DISKETTE
-					break
+					return
 
 			//Currently selected mutation
 			var/bref = params["mutref"]
@@ -686,7 +686,10 @@
 			var/new_sequence_input = tgui_input_text(usr, "Enter a replacement sequence", "Inherent Gene Replacement", 32, encode = FALSE)
 			// Drop out if the string is the wrong length
 			if(length(new_sequence_input) != 32)
+				to_chat(user, span_notice("Sequence is not 32 characters"))
 				return
+			else
+				to_chat(user, span_notice("New Sequence Accepted"))
 
 			//Generate the original and new gene sequences from the CRISPR string
 			//vars to hold the 2 sequences
@@ -709,6 +712,7 @@
 					else
 						old_sequence+=new_pair
 				else
+					to_chat(user, span_notice("dna_console.dm line 716 dropout"))
 					return //drop out, no pair
 
 			//decrement CRISPR charge
