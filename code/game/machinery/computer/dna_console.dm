@@ -666,10 +666,10 @@
 						search_flags |= SEARCH_OCCUPANT
 				if("console")
 					search_flags |= SEARCH_STORED
-					return
+					break
 				if("disk")
 					search_flags |= SEARCH_DISKETTE
-					return
+					break
 
 			//Currently selected mutation
 			var/bref = params["mutref"]
