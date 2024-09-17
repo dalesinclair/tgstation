@@ -105,7 +105,7 @@ GLOBAL_DATUM(main_supermatter_engine, /obj/machinery/power/supermatter_crystal)
 	var/external_power_immediate = 0
 
 	/// External damage that are added to the sm on next [/obj/machinery/power/supermatter_crystal/process_atmos] call.
-	/// SM will not take damage if it's health is lower than emergency point.
+	/// SM will not take damage if its health is lower than emergency point.
 	var/external_damage_immediate = 0
 
 	///The cutoff for a bolt jumping, grows with heat, lowers with higher mol count,
@@ -895,6 +895,11 @@ GLOBAL_DATUM(main_supermatter_engine, /obj/machinery/power/supermatter_crystal)
 
 /obj/machinery/proc/supermatter_zap(atom/zapstart = src, range = 5, zap_str = 3.2 MEGA JOULES, zap_flags = ZAP_SUPERMATTER_FLAGS, list/targets_hit = list(), zap_cutoff = 1.2 MEGA JOULES, power_level = 0, zap_icon = DEFAULT_ZAP_ICON_STATE, color = null)
 	if(QDELETED(zapstart))
+		return
+	if(zap_cutoff <= 0)
+		stack_trace("/obj/machinery/supermatter_zap() was called with a non-positive value")
+		return
+	if(zap_str <= 0) // Just in case something scales zap_str and zap_cutoff to 0.
 		return
 	. = zapstart.dir
 	//If the strength of the zap decays past the cutoff, we stop

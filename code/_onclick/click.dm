@@ -101,7 +101,7 @@
 		CtrlClickOn(A)
 		return
 
-	if(incapacitated(IGNORE_RESTRAINTS|IGNORE_STASIS))
+	if(INCAPACITATED_IGNORING(src, INCAPABLE_RESTRAINTS|INCAPABLE_STASIS))
 		return
 
 	face_atom(A)
@@ -197,7 +197,7 @@
  * A backwards depth-limited breadth-first-search to see if the target is
  * logically "in" anything adjacent to us.
  */
-/atom/movable/proc/CanReach(atom/ultimate_target, obj/item/tool, view_only = FALSE)
+/atom/proc/CanReach(atom/ultimate_target, obj/item/tool, view_only = FALSE)
 	var/list/direct_access = DirectAccess()
 	var/depth = 1 + (view_only ? STORAGE_VIEW_DEPTH : INVENTORY_DEPTH)
 
@@ -231,7 +231,7 @@
 
 	return FALSE
 
-/atom/movable/proc/DirectAccess()
+/atom/proc/DirectAccess()
 	return list(src, loc)
 
 /mob/DirectAccess(atom/target)

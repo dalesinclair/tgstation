@@ -1,12 +1,15 @@
 
 /mob/living/carbon/human/dummy
 	real_name = "Test Dummy"
-	status_flags = GODMODE|CANPUSH
 	mouse_drag_pointer = MOUSE_INACTIVE_POINTER
 	visual_only_organs = TRUE
 	var/in_use = FALSE
 
 INITIALIZE_IMMEDIATE(/mob/living/carbon/human/dummy)
+
+/mob/living/carbon/human/dummy/Initialize(mapload)
+	. = ..()
+	ADD_TRAIT(src, TRAIT_GODMODE, INNATE_TRAIT)
 
 /mob/living/carbon/human/dummy/Destroy()
 	in_use = FALSE
@@ -76,7 +79,7 @@ INITIALIZE_IMMEDIATE(/mob/living/carbon/human/dummy)
 	cut_overlays(TRUE)
 
 /mob/living/carbon/human/dummy/setup_human_dna()
-	randomize_human(src, randomize_mutations = FALSE)
+	randomize_human_normie(src, randomize_mutations = FALSE)
 
 /mob/living/carbon/human/dummy/log_mob_tag(text)
 	return

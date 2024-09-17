@@ -141,7 +141,7 @@
 
 // Can we weld? Plasma cutter does not use charge continuously.
 // Amount cannot be defaulted to 1: most of the code specifies 0 in the call.
-/obj/item/gun/energy/plasmacutter/tool_use_check(mob/living/user, amount)
+/obj/item/gun/energy/plasmacutter/tool_use_check(mob/living/user, amount, heat_required)
 	if(QDELETED(cell))
 		balloon_alert(user, "no cell inserted!")
 		return FALSE
@@ -150,6 +150,9 @@
 	// Alternately it'll need to drain amount*charge_weld every period, which is either obscene or makes it free for other uses
 	if(amount ? cell.charge < PLASMA_CUTTER_CHARGE_WELD * amount : cell.charge < PLASMA_CUTTER_CHARGE_WELD)
 		balloon_alert(user, "not enough charge!")
+		return FALSE
+	if(heat < heat_required)
+		to_chat(user, span_warning("[src] is not hot enough to complete this task!"))
 		return FALSE
 
 	return TRUE
@@ -168,6 +171,9 @@
 		target.cut_overlay(sparks)
 	else
 		. = ..(amount=1)
+
+/obj/item/gun/energy/plasmacutter/try_fire_gun(atom/target, mob/living/user, params)
+	return fire_gun(target, user, user.Adjacent(target) && !isturf(target), params)
 
 #undef PLASMA_CUTTER_CHARGE_WELD
 
@@ -428,3 +434,21 @@
 	new_coin.preparePixelProjectile(target_turf, user)
 	new_coin.fire()
 	return ITEM_INTERACT_SUCCESS
+
+/obj/item/gun/energy/photon
+	name = "photon cannon"
+	desc = "A competitive design to the tesla cannon, that instead of charging latent electrons, releases energy into photons. Eye protection is recommended."
+	icon_state = "photon"
+	inhand_icon_state = "tesla"
+	fire_sound = 'sound/weapons/lasercannonfire.ogg'
+	ammo_type = list(/obj/item/ammo_casing/energy/photon)
+	shaded_charge = TRUE
+	weapon_weight = WEAPON_HEAVY
+	light_color = LIGHT_COLOR_DEFAULT
+	light_system = OVERLAY_LIGHT
+	light_power = 2
+	light_range = 1
+
+/obj/item/gun/energy/photon/Initialize(mapload)
+	. = ..()
+	set_light_on(TRUE) // The gun quite literally shoots mini-suns.
